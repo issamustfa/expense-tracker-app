@@ -183,3 +183,47 @@ init();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
+// دالة لإنشاء نافذة منبثقة مخصصة متوافقة مع ستايل الموقع
+function showCustomModal(title, message, type = 'alert', onConfirm = null) {
+    const modal = document.getElementById('custom-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const modalBtnOk = document.getElementById('modal-btn-ok');
+    const modalBtnCancel = document.getElementById('modal-btn-cancel');
+    const modalIcon = document.getElementById('modal-icon');
+
+    modalTitle.innerText = title;
+    modalMessage.innerText = message;
+
+    // تغيير الأيقونة واللون حسب نوع النافذة
+    if (type === 'confirm') {
+        modalIcon.className = "w-12 h-12 rounded-full bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto text-xl";
+        modalIcon.innerHTML = '<i class="fa-solid fa-trash"></i>';
+        modalBtnCancel.classList.remove('hidden');
+    } else {
+        modalIcon.className = "w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto text-xl";
+        modalIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        modalBtnCancel.classList.add('hidden');
+    }
+
+    modal.classList.remove('hidden');
+
+    // إزالة الأحداث القديمة للأزرار لتجنب تداخلها
+    const newBtnOk = modalBtnOk.cloneNode(true);
+    modalBtnOk.parentNode.replaceChild(newBtnOk, modalBtnOk);
+
+    const newBtnCancel = modalBtnCancel.cloneNode(true);
+    modalBtnCancel.parentNode.replaceChild(newBtnCancel, modalBtnCancel);
+
+    // عند الضغط على موافق / حسناً
+    document.getElementById('modal-btn-ok').addEventListener('click', function() {
+        modal.classList.add('hidden');
+        if (onConfirm) onConfirm(true);
+    });
+
+    // عند الضغط على إلغاء (في حالة الـ confirm)
+    document.getElementById('modal-btn-cancel').addEventListener('click', function() {
+        modal.classList.add('hidden');
+        if (onConfirm) onConfirm(false);
+    });
+}
