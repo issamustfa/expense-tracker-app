@@ -1,0 +1,23 @@
+/* تخصيص شكل شريط التمرير (Scrollbar) ليكون متناسقاً مع الوضع الداكن */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937; /* لون خلفية داكن مشابه لـ gray-800 */
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4b5563; /* لون شريط التمرير gray-600 */
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #10b981; /* يتحول للأخضر عند التحويم أو اللمس */
+}
+
+/* تنسيق إضافي لضمان سلاسة التمرير والتفاعل على الهواتف */
+html {
+    scroll-behavior: smooth;
+}

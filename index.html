@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدير المصروف الشخصي</title>
+    <!-- ربط Tailwind CSS لتصميم الواجهة بسرعة وسلاسة -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- ربط مكتبة FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ربط مكتبة Chart.js للرسوم البيانية -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ربط ملف الـ CSS المخصص -->
+    <link rel="stylesheet" href="style.css">
+    <!-- خط Cairo العربى لجمال الواجهة -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col justify-between pb-20">
+
+    <!-- الرأسية (Header) -->
+    <header class="bg-gray-800 border-b border-gray-700 p-4 text-center shadow-md">
+        <h1 class="text-xl font-bold text-emerald-400"><i class="fa-solid fa-wallet ml-2"></i>مديري المالي</h1>
+    </header>
+
+    <!-- المحتوى الأساسي (Main Content Area) -->
+    <main class="p-4 max-w-md mx-auto w-full space-y-6">
+
+        <!-- لوحة الملخص المالي (Dashboard Cards) -->
+        <section class="grid grid-cols-1 gap-4">
+            <!-- إجمالي الرصيد -->
+            <div class="bg-gray-800 border border-gray-700 p-5 rounded-2xl shadow-lg text-center">
+                <p class="text-gray-400 text-sm mb-1">الرصيد الحالي</p>
+                <h2 id="total-balance" class="text-3xl font-bold text-emerald-400">0.00 EGP</h2>
+            </div>
+            
+            <!-- الدخل والمصروفات بجانب بعض -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow">
+                    <p class="text-gray-400 text-xs mb-1"><i class="fa-solid fa-arrow-down text-emerald-400 ml-1"></i>إجمالي الدخل</p>
+                    <p id="total-income" class="text-lg font-bold text-emerald-400">0.00</p>
+                </div>
+                <div class="bg-gray-800 border border-gray-700 p-4 rounded-xl shadow">
+                    <p class="text-gray-400 text-xs mb-1"><i class="fa-solid fa-arrow-up text-rose-400 ml-1"></i>إجمالي المصروف</p>
+                    <p id="total-expense" class="text-lg font-bold text-rose-400">0.00</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم إضافة معاملة جديدة (Add Transaction Form) -->
+        <section class="bg-gray-800 border border-gray-700 p-4 rounded-2xl shadow-lg">
+            <h3 class="text-md font-semibold mb-3 text-gray-200">إضافة معاملة جديدة</h3>
+            <form id="transaction-form" class="space-y-3">
+                <div>
+                    <input type="text" id="text" placeholder="بيان المعاملة (مثال: طعام، مواصلات...)" 
+                        class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" required>
+                </div>
+                <div>
+                    <input type="number" id="amount" placeholder="المبلغ (بالجنيه)" 
+                        class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" required>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="type" class="bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="expense">مصروف 🔴</option>
+                        <option value="income">دخل 🟢</option>
+                    </select>
+                    <select id="category" class="bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="طعام">طعام</option>
+                        <option value="مواصلات">مواصلات</option>
+                        <option value="فواتير">فواتير</option>
+                        <option value="ترفيه">ترفيه</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-lg transition shadow-md text-sm">
+                    إضافة المعاملة
+                </button>
+            </form>
+        </section>
+
+        <!-- قسم الرسوم البيانية والإحصاءات -->
+        <section class="bg-gray-800 border border-gray-700 p-4 rounded-2xl shadow-lg">
+            <h3 class="text-md font-semibold mb-3 text-gray-200 text-center">توزيع المصروفات</h3>
+            <div class="w-full h-48 flex justify-center items-center">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </section>
+
+        <!-- قسم سجل المعاملات -->
+        <section class="bg-gray-800 border border-gray-700 p-4 rounded-2xl shadow-lg">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-md font-semibold text-gray-200">سجل المعاملات</h3>
+                <span id="clear-history" class="text-xs text-rose-400 cursor-pointer hover:underline">حذف الكل</span>
+            </div>
+            <ul id="list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                <!-- سيتم تعبئة المعاملات برمجياً عبر الـ JavaScript -->
+                <p id="no-transactions" class="text-center text-gray-500 text-sm py-4">لا توجد معاملات مسجلة حتى الآن</p>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- شريط التنقل السفلي الثابت (Bottom Navigation Bar) -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 py-3 px-6 flex justify-around items-center shadow-lg">
+        <button class="text-emerald-400 flex flex-col items-center text-xs">
+            <i class="fa-solid fa-house text-lg mb-1"><span>الرئيسية</span></i>
+        </button>
+        <button onclick="window.scrollTo({top: 500, behavior: 'smooth'})" class="text-gray-400 hover:text-emerald-400 flex flex-col items-center text-xs">
+            <i class="fa-solid fa-chart-pie text-lg mb-1"><span>الإحصاءات</span></i>
+        </button>
+        <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" class="text-gray-400 hover:text-emerald-400 flex flex-col items-center text-xs">
+            <i class="fa-solid fa-list-ul text-lg mb-1"><span>السجل</span></i>
+        </button>
+    </nav>
+
+    <!-- ربط ملف البرمجة -->
+    <script src="script.js"></script>
+</body>
+</html>
+<link rel="manifest" href="manifest.json">
