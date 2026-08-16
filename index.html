@@ -118,5 +118,28 @@
     <!-- ربط ملف البرمجة -->
     <script src="script.js"></script>
 </body>
+    <!-- النافذة المنبثقة المخصصة (Custom Modal) -->
+<div id="custom-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-gray-800 border border-gray-700 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center space-y-4 animate-fade-in">
+        <!-- أيقونة التحذير أو التنبيه -->
+        <div id="modal-icon" class="w-12 h-12 rounded-full bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto text-xl">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <!-- عنوان ورسالة النافذة -->
+        <h3 id="modal-title" class="text-lg font-bold text-white">تنبيه</h3>
+        <p id="modal-message" class="text-sm text-gray-300">هذه هي رسالة التنبيه...</p>
+        
+        <!-- أزرار الإجراءات -->
+        <div id="modal-actions" class="flex space-x-2 space-x-reverse pt-2">
+            <button id="modal-btn-ok" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl transition text-sm">
+                حسناً
+            </button>
+            <button id="modal-btn-cancel" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2.5 rounded-xl transition text-sm hidden">
+                إلغاء
+            </button>
+        </div>
+    </div>
+</div>
+    
 </html>
 <link rel="manifest" href="manifest.json">
